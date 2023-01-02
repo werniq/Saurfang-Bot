@@ -1,6 +1,5 @@
 
 > Discord bot 
-<h3>It is not eights day of me learning golang, but anyway..</h3>
 <hr>
 <h3>Discord bot's become quite popular project, to practice golang. So I decided to make my own bot too <3 </h3>
     <h3>This bot has next functionalities: </h3>
