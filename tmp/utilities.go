@@ -62,7 +62,7 @@ func (e *EmbMessage) SetColor(c color.RGBA) *EmbMessage {
 }
 
 func (e *EmbMessage) SetTimestamp(t time.Time) *EmbMessage {
-	e.em.Timestamp = t.Format(time.ANSIC)
+	e.em.Timestamp = t.Format(time.RFC3339)
 	return e
 }
 
