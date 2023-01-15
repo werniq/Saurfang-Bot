@@ -5,7 +5,7 @@
     <h3>This bot has next functionalities: </h3>
 <ol><li>func searchGifs</li>
     <ul>    
-            <li> This function you can call by typing $search <-keyword->
+            <li> This function you can call by typing $search {keyword}
             <li>It sends you back a gif, which represents given keywoard
     </ul>
 <li>func changeStatus</li>
@@ -15,20 +15,31 @@
      </ul>
 <li>func help</li>
     <ul>
-        Help function you can call by typing $help
+        help
         Help function sends you message, with all functions that this bot can run.
     </ul>
 <li>func greetNewMember</li>
     <ul>
-        <li>greetNewMember function you can't call. However, it is executed whenever new user joins guild.</li>
-        <li>It just prints greeting, suitable to my server. </li>
-    </ul>
+       <li> greetNewMember function you can't call. However, it is executed whenever new user joins guild.</li>
+       <li>It prints greeting, suitable to my server. </li>
+        </ul>
         <li>func listRules </li>
         <ul>
-            <li> listRules function called, any time you type $listRules </li>
-            <li> This function just returns some rules, that I declared at the reasons map </li>
+            <li> $listRules </li>
+            <li> Lists all rules which works on this particular server </li>
         </ul>
+        <li>func ban </li>
+        <ul>
+            <li> $ban {user} {reason}  </li>
+            <li> Bans User for 1 day  </li>
+        </ul>
+        <li>func unban </li>
+        <ul>
+            <li> $unban (you need to reply for prioritively unbanned user message)  </li>
+            <li> Unbans user  </li>
+        </ul>
+ 
+ 
  <hr>
-        <li>   reasons map used for banning users with reason    </li>
-    </ol>
+ </ol>
     ======
