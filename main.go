@@ -1,19 +1,19 @@
 package main
 
 import (
+	"ds-bot/tmp"
 	"encoding/json"
 	"fmt"
+	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
+	"image/color"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
 	"strings"
 	"syscall"
-
-	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
 )
 
 type GifSearch struct {
@@ -207,106 +207,106 @@ type GifSearch struct {
 }
 
 const (
-	botPrefix = "$"
-	ownerChatId 	 = "1058658554325770320"
+	botPrefix       = "$"
+	ownerChatId     = "1058658554325770320"
 	forTheHordeLink = "https://media.giphy.com/media/xThtatRttFzLD9oEtG/giphy.gif"
-	message = `
+	message         = `
 	Hey!
-	My name is Saurfang #or Super Bebra # , and I am extremely useful bot!
-	I have such commands: 
-		$search {keyword} 	  - Send gif, which represents keyword
-		$help 			      - List of commands, which this bot wields
-		$ban --replyToMessage - Bans author of replied message
-		$listReasons		  - Prints all rules, in this server
-
+		My name is Saurfang, and I am extremely useful bot!
+		I have such commands: 
+			$search {keyword} 	  	- Send gif, which represents keyword
+			$help 			      	- List of commands, which this bot wields
+			$ban	{user} {reason} - Kick out user from server 
+			$listrules 		  	    - Prints all rules, in this server
+			$unban 					- Unbans user(need to reply to message)
 	`
 )
 
+func colorToInt(color color.RGBA) int {
+	return 256*256*int(color.R) + 256*int(color.G) + int(color.B)
+}
+
 var (
-	reasons = map[int]string{
-		1:		"Harass, bully, or threat marginalized or vulnerable groups of people",
-		2:		"Engage in content manipulation (spamming, subscriber fraud, vote manipulation, or ban evasion)",
-		3:		"Post or threaten to post intimate or sexually explicit photos or videos of another person without their consent",
-		4:		"Impersonate someone in a misleading way",
-		5:		"Label the content and communities improperly (especially graphic content)",
-		6: 		"Post suggestive or sexual content that involves minors",
-		7: 		"Post illegal content",
-		8: 		"Do anything that stops the normal use of this server",
-		9: 		"Transmit, distribute, or upload any viruses, worms, or other malware intended to interfere with this servers service",
-		10: 	"Use the platform to violate the law or infringe on intellectual and other property right",
-		11: 	"Engage in actions that could disrupt, disable, overburden, or impair this servers service",
-		12: 	"Attempt to gain access to another user`s account",
-		13: 	"Access, search, or collect data from Reddit",
-		14: 	"Use the platform in any way that may be abusive or fraudulent",
-	}	
+	rules = `
+		Harass, bully, or threat marginalized or vulnerable groups of people,
+		Engage in content manipulation (spamming, subscriber fraud, vote manipulation, or ban evasion),
+		Post or threaten to post intimate or sexually explicit photos or videos of another person without their consent,
+		Impersonate someone in a misleading way,
+		Label the content and communities improperly (especially graphic content),
+		Post suggestive or sexual content that involves minors,
+		Post illegal content,
+		Do anything that stops the normal use of this server,
+		Transmit, distribute, or upload any viruses, worms, or other malware intended to interfere with this servers service,
+		Use the platform to violate the law or infringe on intellectual and other property right,
+		Engage in actions that could disrupt, disable, overburden, or impair this servers service,
+		Attempt to gain access to another user's account,
+		Access, search, or collect data from this server,
+		Use the platform in any way that may be abusive or fraudulent`
 )
 
-
 func main() {
-	// 1
+
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal(err)
 	}
 	Token := os.Getenv("DISCORD_TOKEN")
 
-	// 2
 	bot, err := discordgo.New("Bot " + Token)
 	if err != nil {
 		fmt.Println("Error creating a discord Session, ", err)
 	}
 
-	// set status
-	bot.AddHandler(changeStatus)
-	// list all commands
-	bot.AddHandler(help)
-	// send gif, which represents keyword
-	bot.AddHandler(searchGifs)
-	// bans user
 	bot.AddHandler(ban)
-	// say greetengs to new member
+	bot.AddHandler(help)
+	bot.AddHandler(changeStatus)
+	bot.AddHandler(searchGifs)
 	bot.AddHandler(greetNewMember)
-	// lists all reasons, using which user can be banned
 	bot.AddHandler(listRules)
-	// bot.AddHandler(thisServerIsAlwaysAlive)
+	bot.AddHandler(unban)
+
+	bot.Identify.Intents = discordgo.IntentsGuildMessages
+	bot.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildMembers | discordgo.IntentsGuildPresences
 
 	err = bot.Open()
 	if err != nil {
 		fmt.Println("Error opening Discord Session, ", err)
 	}
-	fmt.Println("The bot is now running. Press CTRL-C to exit.")
+	fmt.Println("Bot is currently running. CTRL-C to exit.")
 
-	// 5
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 }
 
-func changeStatus(s *discordgo.Session, event *discordgo.Event) {
-	fmt.Println("ready function running")
-	s.UpdateGameStatus(1, "I Love Hot Milfs")
-	// s.UpdateGameStatus()
-	
-}
-
-func searchGifs(s *discordgo.Session, message *discordgo.MessageCreate) {
-	fmt.Println("Gif function running")
-	// 1
-	err := godotenv.Load(".env")
-	giphyToken := os.Getenv("GIPHY_TOKEN")
-	if err != nil {
-		log.Fatal(err)
+func searchGifs(s *discordgo.Session, mes *discordgo.MessageCreate) {
+	if mes.Author.Bot {
+		return
 	}
-	
 
-	command := strings.Split(message.Content, " ")
-	
-	if command[0] == botPrefix + "search" && len(command) > 1 {
+	args := strings.Split(strings.TrimPrefix(mes.Content, botPrefix), " ")
+
+	command := args[0]
+
+	if len(args) > 1 {
+		args = args[1:]
+	} else {
+		args = nil
+	}
+	if command == "search" && len(command) > 1 {
+		err := godotenv.Load(".env")
+
+		giphyToken := os.Getenv("GIPHY_TOKEN")
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		url := "https://api.giphy.com/v1/gifs/random"
 		var result GifSearch
-		
-		gifKeyword := strings.Join(command[1:], " ")
-		
+
+		gifKeyword := strings.Join(args[1:], " ")
+
 		req, err := http.NewRequest("GET", url, nil)
 
 		if err != nil {
@@ -327,69 +327,116 @@ func searchGifs(s *discordgo.Session, message *discordgo.MessageCreate) {
 		if err := json.Unmarshal(body, &result); err != nil {
 			fmt.Println("Can not unmarshall JSON", err)
 		}
-		
-		s.ChannelMessageSend(message.ChannelID, result.Data.EmbedUrl)
+
+		s.ChannelMessageSend(mes.ChannelID, result.Data.EmbedUrl)
 		res.Body.Close()
 	}
 }
 
+func changeStatus(s *discordgo.Session, event *discordgo.Event) {
+	s.UpdateListeningStatus("Horde theme song")
+}
 
-// func say(s *discordgo.Session, mes *discordgo.MessageCreate) {
-// 	if mes.Author.ID == s.State.User.ID {
-// 		return
-// 	}
-// 	command := strings.Split(mes.Content, " ")
-	
-// 	if command[0] == botPrefix + "say" && len(mes) > 1 {
-// 		// messageToSend := strings.Join()
-// 		s.ChannelMessageSend(mes.ChannelID, )
-// 	}asdfadf
-// }
-func help(s *discordgo.Session, mes *discordgo.MessageCreate) {
-	// command := strings.Split(m.Content, " ")
-	if mes.Content == botPrefix + "help" {
-		s.ChannelMessageSend(mes.ChannelID, message)
+func unban(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if m.Author.Bot {
+		return
+	}
+	args := strings.Split(strings.TrimPrefix(m.Content, botPrefix), " ")
+	command := args[0]
+	if len(args) <= 2 {
+		args = args[1:]
+	} else {
+		args = nil
+	}
+
+	if command == "unban" {
+		if tmp.HasPerm(s, m.Author, m.ChannelID, discordgo.PermissionBanMembers) {
+			var u *discordgo.User
+			if m.ReferencedMessage != nil {
+				u = m.ReferencedMessage.Author
+			}
+
+			if u == nil {
+				_, _ = s.ChannelMessageSend(m.ChannelID, "That user was never in the server.")
+				return
+			}
+			err := s.GuildBanDelete(m.GuildID, u.ID)
+			if err != nil {
+				_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Error unbanning user: %s", err.Error()))
+				return
+			}
+			title := "User successfully unbanned"
+			desc := fmt.Sprintf("User %v has been unbanned! Welcome back!", u.Mention())
+
+			_, _ = s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage(title, desc).Return())
+		} else {
+			_, _ = s.ChannelMessageSend(m.ChannelID, "You have no permission")
+		}
+	}
+}
+
+func help(s *discordgo.Session, ms *discordgo.MessageCreate) {
+	if ms.Author.Bot {
+		return
+	}
+	if ms.Content == botPrefix+"help" {
+		s.ChannelMessageSend(ms.ChannelID, message)
 	}
 }
 
 func ban(s *discordgo.Session, m *discordgo.MessageCreate) {
-	fmt.Println("Ban function running")
-	
-	refMes := m.ReferencedMessage
-	command := strings.Split(m.Content, " ")
-	// botPRefix + ban + "1-14"
-	if command[0] == botPrefix + "ban" && len(command) > 1 {	
-		if m.Content == botPrefix + "ban " + command[1] {
-			banReason, _ := strconv.Atoi(command[1])
-			err := s.GuildBanCreateWithReason(m.GuildID, refMes.Author.ID, reasons[banReason], 7)
-			
-			if err != nil {
-				s.ChannelMessageSend(m.ChannelID, "Something went wrong.. Reported to owner")
-				mes :=  fmt.Sprintf("Error banning user %s | in chat %s.", ownerChatId, m.ChannelID)
-				s.ChannelMessageSend(ownerChatId, mes)
+	if m.Author.Bot {
+		return
+	}
+	args := strings.Split(strings.TrimPrefix(m.Content, botPrefix), " ")
+	command := args[0]
+	if len(args) > 1 {
+		args = args[1:]
+	} else {
+		args = nil
+	}
+	if command == "ban" {
+		if tmp.HasPerm(s, m.Author, m.ChannelID, discordgo.PermissionBanMembers) {
+			if len(args) < 2 {
+				_, _ = s.ChannelMessageSend(m.ChannelID, "You should provide reasons for banning: $ban {user} {reason}")
+				return
 			}
-			s.ChannelMessageSend(m.ChannelID, "User is banned")
-			return
-		} 
-		s.ChannelMessageSend(m.ChannelID, "Please, provide a reason.")	 
-	}	
-}
+			u := tmp.FindUser(s, m.Mentions, args[0])
+			if u == nil {
+				_, _ = s.ChannelMessageSend(m.ChannelID, "That user is not in the server.")
+				return
+			}
+			err := s.GuildBanCreateWithReason(m.GuildID, u.ID, strings.Join(args[1:], " "), 0)
+			if err != nil {
+				_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Error banning user: %s", err.Error()))
+				return
+			}
+			title := "User successfully banned"
+			desc := fmt.Sprintf("User %v has been banned. Do not repeat his mistakes.", u.Mention())
 
-func listRules(s *discordgo.Session, m *discordgo.MessageCreate) {
-	var reason string
-	// command := strings.Split(m.Content, " ")
-	if m.Content == botPrefix + "listReasons"  {
-		for i := 1; i <= 14; i++ {
-			// i = strconv.Atoi(i)
-			reason = reasons[i]
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Reason %d: ----> %s", i, reason))
+			_, _ = s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage(title, desc).Return())
+			fmt.Println("success")
+		} else {
+			_, _ = s.ChannelMessageSend(m.ChannelID, "You have no permission")
 		}
 	}
 }
-// func unban(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-// }
+// listRules shows reasons, which can be used to ban the user
+func listRules(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if m.Author.Bot {
+		return
+	}
 
+	args := strings.Split(strings.TrimPrefix(m.Content, botPrefix), " ")
+	command := args[0]
+
+	if command == "listrules" {
+		s.ChannelMessageSend(m.ChannelID, rules)
+	}
+}
+
+// greetNewMember basically greets new member
 func greetNewMember(s *discordgo.Session, mes *discordgo.MessageCreate) {
 	if mes.Type == 7 {
 		s.ChannelMessageSend(mes.ChannelID, `
@@ -412,6 +459,6 @@ func greetNewMember(s *discordgo.Session, mes *discordgo.MessageCreate) {
 		     	Use the platform in any way that may be abusive or fraudulent 
 		For The Horde!	
 	`)
-	s.ChannelMessageSend(mes.ChannelID, fmt.Sprint(forTheHordeLink))
+		s.ChannelMessageSend(mes.ChannelID, fmt.Sprint(forTheHordeLink))
 	}
 }
