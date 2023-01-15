@@ -406,7 +406,7 @@ func ban(s *discordgo.Session, m *discordgo.MessageCreate) {
 				_, _ = s.ChannelMessageSend(m.ChannelID, "That user is not in the server.")
 				return
 			}
-			err := s.GuildBanCreateWithReason(m.GuildID, u.ID, strings.Join(args[1:], " "), 0)
+			err := s.GuildBanCreateWithReason(m.GuildID, u.ID, strings.Join(args[1:], " "), 1)
 			if err != nil {
 				_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Error banning user: %s", err.Error()))
 				return
