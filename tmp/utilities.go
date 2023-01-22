@@ -3,6 +3,7 @@ package tmp
 import (
 	"fmt"
 	"image/color"
+	"strconv"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -35,7 +36,11 @@ func FindUser(session *discordgo.Session, mentions []*discordgo.User, arg string
 }
 
 func CreateEmbedMessage(title string, description string) *EmbMessage {
-	return NewMessageEmbed().SetTitle(title).SetDescription(description).SetFooter().SetFooterText("Bot Saurfang ").SetTimestamp(time.Now()).SetColor(colornames.Cyan)
+	return NewMessageEmbed().SetTitle(title).SetDescription(description).SetFooter().SetFooterText("Bot Saurfang ").SetTimestamp(time.Now()).SetColor(colornames.Cadetblue)
+}
+
+func CreateEmbedInfoMessage(title string, description string) *EmbMessage {
+	return NewMessageEmbed().SetTitle(title).SetDescription(description).SetFooter().SetFooterText("Bot Saurfang ").SetTimestamp(time.Now()).SetColor(colornames.Azure)
 }
 
 type EmbMessage struct {
@@ -62,7 +67,7 @@ func (e *EmbMessage) SetColor(c color.RGBA) *EmbMessage {
 }
 
 func (e *EmbMessage) SetTimestamp(t time.Time) *EmbMessage {
-	e.em.Timestamp = t.Format(time.ANSIC)
+	e.em.Timestamp = t.Format(time.RFC3339)
 	return e
 }
 
@@ -97,4 +102,19 @@ func NewMessageEmbed() *EmbMessage {
 		Fields:      nil,
 	}
 	return &EmbMessage{em: em}
+}
+
+func Max(arr map[int]int, members []*discordgo.Member) (int, int) {
+	id, _ := strconv.Atoi(members[0].User.ID)
+	max := arr[id]
+	userID := 0
+	returnUserID := 0
+	for i := 0; i < len(members)-1; i++ {
+		userID, _ = strconv.Atoi(members[i].User.ID)
+		if arr[userID] > max {
+			max = arr[userID]
+			returnUserID = userID
+		}
+	}
+	return max, returnUserID
 }
