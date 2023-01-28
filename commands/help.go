@@ -24,11 +24,12 @@ const (
 	Hey!
 		My name is Saurfang, and I am extremely useful bot!
 		I have such commands: 
-			$search {keyword} 	  	- Send gif, which represents keyword
-			$help 			      	- List of commands, which this bot wields
-			$ban	{user} {reason} - Kick out user from server 
-			$listrules 		  	    - Prints all rules, in this server
-			$unban 					- Unbans user(need to reply to message)
+			.search {keyword} 	  	- Send gif, which represents keyword
+			.help 			      	- List of commands, which this bot wields
+			.ban	{user} {reason} - Kick out user from server 
+			.listrules 		  	    - Prints all rules, in this server
+			.unban 					- Unbans user(need to reply to message)
+			.weather latitude longitude - Print weather forecast by give coordinates
 	`
 	rules = `
 		Harass, bully, or threat marginalized or vulnerable groups of people,
@@ -52,6 +53,6 @@ func Help(s *discordgo.Session, ms *discordgo.MessageCreate) {
 		return
 	}
 	if ms.Content == botPrefix+"help" {
-		s.ChannelMessageSendEmbed(ms.ChannelID, tmp.CreateEmbedInfoMessage("Help: ", message).Return())
+		s.ChannelMessageSendEmbed(ms.ChannelID, tmp.CreateEmbedMessage("Help", message, 2).Build())
 	}
 }

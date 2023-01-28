@@ -16,6 +16,6 @@ func ListRules(s *discordgo.Session, m *discordgo.MessageCreate) {
 	command := args[0]
 
 	if command == "listrules" {
-		s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedInfoMessage("Rules: ", rules).Return())
+		s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage("Rules", rules, 3).Build())
 	}
 }

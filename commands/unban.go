@@ -38,7 +38,7 @@ func Unban(s *discordgo.Session, m *discordgo.MessageCreate) {
 			title := "User successfully unbanned"
 			desc := fmt.Sprintf("User %v has unbanned %v! Welcome back!", m.Author, u.Mention())
 
-			_, _ = s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage(title, desc).Return())
+			_, _ = s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage(title, desc, 2).Build())
 		} else {
 			_, _ = s.ChannelMessageSend(m.ChannelID, "You have no permission")
 		}
