@@ -19,8 +19,8 @@ var (
 	BYBIT_API_SECRET = "ljA9MXXFcohtLasjIa6BzszHnkLHpdTVlMY0"
 	endpoint         = "/spot/v3/public/quote/ticker/price?symbol="
 	BuyingPrice      = map[string]float32{}
+
 	MaticLogo = "https://th.bing.com/th/id/R.7ad2ca3d46e1b51160f446aab3910938?rik=EwVa4B4hnM%2fqpw&pid=ImgRaw&r=0"
-	EthLogo
 )
 
 type ByBitResponse struct {
@@ -57,7 +57,7 @@ func TokenPrice(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if args != nil && command == "token" {
-		BuyingPrice["matic"] = 127.5
+		BuyingPrice[strings.ToLower(args[0])] = 117.7
 		endpoint = fmt.Sprintf(endpoint + args[0])
 		fmt.Println(endpoint)
 		req, err := http.NewRequest("GET", fmt.Sprintf("https://api.bybit.com%s", endpoint), nil)
@@ -96,15 +96,18 @@ func TokenPrice(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%v", err))
 			return
 		}
-		profitPerc, _ := strconv.Atoi(r.Result.Price)
-		var gain float32
-		tokenPrice := BuyingPrice[strings.ToLower(args[0])]
+		profitPerc, err := strconv.ParseFloat(r.Result.Price, 32)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-		gain = tokenPrice * float32(profitPerc)
+		tokenPrice := BuyingPrice[strings.ToLower(args[0])]
+		gain := tokenPrice * float32(profitPerc)
+
 		s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage("ByBit Response for "+args[0], fmt.Sprintf(`
 			Token name: %s
 			Latest Price: %s
-			Approximate gain: %f
+			USD amount after selling your MATIC Balance: %f
 		`,
 			r.Result.Symbol,
 			r.Result.Price,
