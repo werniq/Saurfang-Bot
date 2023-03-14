@@ -1,5 +1,5 @@
 
-> Discord bot 
+# Discord bot 
 <hr>
 <h3>Discord bot's become quite popular project, to practice golang. So I decided to make my own bot too <3 </h3>
     <h3>This bot has next functionalities: </h3>
