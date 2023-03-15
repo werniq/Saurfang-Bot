@@ -30,11 +30,6 @@ func main() {
 		fmt.Println("Error creating a discord Session, ", err)
 	}
 
-	//db, err := commands.OpenDB()
-	//defer db.Close()
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
 	bot.AddHandler(commands.SaveMessage)
 	bot.AddHandler(commands.GetWeather)
 	bot.AddHandler(commands.Help)
@@ -44,6 +39,7 @@ func main() {
 	bot.AddHandler(commands.ListRules)
 	bot.AddHandler(commands.Ban)
 	bot.AddHandler(commands.Unban)
+	bot.AddHandler(commands.FindLyrics)
 	bot.AddHandler(commands.TokenPrice)
 	//bot.AddHandler(commands.Stats)
 	bot.AddHandler(commands.WordStats)

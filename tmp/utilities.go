@@ -58,6 +58,8 @@ func colorFromType(t Type) color.RGBA {
 		c = colornames.Lightgoldenrodyellow
 	case 4:
 		c = colornames.Goldenrod
+	case 5:
+		c = colornames.Blueviolet
 	}
 	return c
 }
