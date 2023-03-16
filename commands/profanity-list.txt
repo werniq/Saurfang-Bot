@@ -10,10 +10,15 @@ assnigga
 assniggas
 assnigger
 assniggers
-abo/abbo
-abos/abbos/abboes/aboes
+abo
+abbo
+abos
+abbos
+abboes
+aboes
 bitch
-bitches/bitchs
+bitches
+bitchs
 bitchy
 bitchass
 bitchtits
@@ -33,8 +38,11 @@ cocks
 cocksuckers
 cunt
 cunts
-cracker/cracka
-crackers/crackaz/crackas
+cracker
+cracka
+crackers
+crackaz
+crackas
 cum
 cums
 cumduzzler
@@ -55,24 +63,30 @@ childfuckers
 chinks
 chinky
 chinkies
-chinky-chonk/chinky chonk
-chinky-chonks/chinky chonks
+chinky-chonk
+chinky-chonks
 coon
 coons
-dick/dik
-dickhead/dick head
-dicks/dikz/dix
+dick
+dik
+dickhead
+dicks
+dikz
+dix
 dickweasel
 dickweasels
 dickweed
 dickweeds
-dickheads/dick heads
+dickheads
+dick heads
 dicksucker
 dicksuckers
 dyke
 dykes
-dunecoon/dune coon
-dunecoons/dune coons
+dunecoon
+dune coon
+dunecoons
+dune coons
 dumbarse
 dumbarses
 frick
@@ -94,7 +108,8 @@ fucktards
 fucktardis
 fucka
 fuckaz
-fatfuck/fat fuck
+fatfuck
+fat fuck
 fag
 faggot
 fags
@@ -104,17 +119,26 @@ faggoting
 fatarse
 fatarses
 gaydo
-gaydos/gaydoes
-goddamn/god damn
-goddamnit/god dammit/god damn it
+gaydos
+gaydoes
+goddamn
+god damn
+goddamnit
+god dammit
+god damn it
 gook
 gooks
 gringo
-gringos/gringoes
-hoe/ho
-hoes/hos
-hebe/heeb
-hebes/heebs
+gringos
+gringoes
+hoe
+ho
+hoes
+hos
+hebe
+heeb
+hebes
+heebs
 jizz
 kak
 kaks
@@ -132,38 +156,65 @@ motherfuckin’
 motherfucker
 motherfuckers
 mofo
-nigga/niga/niguh/nigguh
-nigger/niggur/niger/nigr
-niggas/niggaz/nigaz
-niggers/niggurz/nigerz, nigrz, nigrs
+nigga
+niga
+niguh
+nigguh
+nigger
+niggur
+niger
+nigr
+niggas
+niggaz
+nigaz
+niggers
+niggurz
+nigerz
+nigrz
+nigrs
 paki
 pakis
 porn
 porno
 pornos
-prick/prik
-pricks/prikz/priks/prix
+prick
+prik
+pricks
+prikz
+priks
+prix
 poonani
 queer
 queers
 shit
 shitty
 shits
-sheepshagger/sheep shagger
-sheepshaggers/sheep shaggers
-sandnigga/sand nigga
-sandnigger/sand nigger
-sandniggas/sand niggas
-sandniggers/sand niggers
-shitter/shita
-shitters/shitaz
+sheepshagger
+sheep shagger
+sheepshaggers
+sheep shaggers
+sandnigga
+sand nigga
+sandnigger
+sand nigger
+sandniggas
+sand niggas
+sandniggers
+sand niggers
+shitter
+shita
+shitters
+shitaz
 shitting
 shittin’
 shitted
 shithead
 shitheads
-spic/spik
-spics/spix/spikz
+spic
+spik
+spics
+spix
+spikz
 shithouse
 shithouses
 shittiest
@@ -177,16 +228,28 @@ shitposters
 shat
 slut
 sluts
-snow nigger/snow nigga/snownigger, snow nigga
-snow niggers/snow niggas/snow niggaz, snowniggers, snowniggas, snowniggaz
+snownigger
+snownigga
+snownigger
+snowniggers
+snowniggas
+snowniggaz
+snowniggers
+snowniggas
+snowniggaz
 tacohead
 tacoheads
 thot
 thotbot
 thots
 thotbots
-unclefucker/unclefucka/uncle fucker/uncle fucka
-unclefuckers/unclefuckaz, uncle fuckers/uncle fuckaz
+unclefucker
+unclefucka
+unclefucka
+unclefuckers
+unclefuckaz
+unclefuckers
+unclefuckaz
 vag
 vags
 wank
@@ -203,11 +266,11 @@ white cracker
 whitecracker
 whitecracka
 white cracka
-white crackers
+whitecrackers
 whitecrackers
 whitecrackaz
-white crackaz
-white crackas
+whitecrackaz
+whitecrackas
 wog
 wogs
 wop

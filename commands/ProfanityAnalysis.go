@@ -1,11 +1,13 @@
 package commands
 
 import (
+	"bufio"
 	"ds-bot/tmp"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"os"
 	"strings"
+	"time"
 )
 
 //type Message struct {
@@ -27,14 +29,8 @@ func ProfanityAnalysis(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	args := strings.Split(m.Content, " ")
-	command := args[0]
-	if len(args) > 1 {
-		args = args[1:]
-	} else {
-		args = nil
-	}
 
-	if args != nil && command == botPrefix+"profanity" {
+	if args[0] == botPrefix+"profanity" {
 		db, err := OpenDb()
 		if err != nil {
 			Logger().Printf("Error opening database connection: %v\n", err)
@@ -47,54 +43,68 @@ func ProfanityAnalysis(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
-		fi, err := os.ReadFile("profanity-list.txt")
+		fi, err := os.Open("C:\\Users\\Oleksandr Matviienko\\ds-bot\\ds-bot\\commands\\profanity-list.txt")
 		if err != nil {
 			Logger().Printf("Error opening profanity-list.txt: %v\n", err)
 			return
 		}
 
-		statsIds := []string{}
-		antiStatsIds := []string{}
+		scanner := bufio.NewScanner(fi)
+		profanityList := []string{}
+		for scanner.Scan() {
+			profanityList = append(profanityList, scanner.Text())
+		}
 
-		statistics := make(map[string]int)
+		//statsId := make(map[string]bool)
+		antiStatsIds := make(map[string]bool)
+
+		//var ids []string
+		var antiIds []string
+
+		//statistics := make(map[string]int)
 		antiStatistics := make(map[string]int)
 
 		for row.Next() {
 			var id int
 			var content string
 			var authorId string
-			if err = row.Scan(&id, &content, &authorId); err != nil {
+			var authorUsername string
+			var timestamp time.Time
+			var msgId string
+			if err = row.Scan(&id, &content, &authorId, &authorUsername, &timestamp, &msgId); err != nil {
 				Logger().Printf("Error scanning rows: %v\n", err)
 				return
 			}
 
-			if profanityCheck(content, fi) {
-				if elementInArray(antiStatsIds, authorId) {
+			if profanityCheck(content, profanityList) {
+				fmt.Println("PASSED")
+				if !antiStatsIds[authorId] {
 					antiStatistics[authorId]++
-					antiStatsIds = append(antiStatsIds, authorId)
+					antiStatsIds[authorId] = true
+					antiIds = append(antiIds, authorId)
+					fmt.Println("not-okok")
+				} else {
+					antiStatistics[authorId]++
 				}
 			} else {
-				if elementInArray(statsIds, authorId) {
-					statistics[authorId]++
-					statsIds = append(statsIds, authorId)
-				}
+				fmt.Println("NOT PASSED")
 			}
 		}
 
 		// statistic for polite users
-		id, score := findMax(statistics, statsIds)
-		user, err := s.User(id)
-		if err != nil {
-			Logger().Printf("Error retrieving user from session: %v", err)
-			return
-		}
-
-		s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage("The most polite person on this server..", fmt.Sprintf(`
-				%v with the score of %d`, user.Mention(), score), 3).Build())
+		//id, score := findMax(statistics, ids)
+		//user, err := s.User(id)
+		//if err != nil {
+		//	Logger().Printf("Error retrieving user from session: %v", err)
+		//	return
+		//}
+		//
+		//s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage("The most polite person on this server..", fmt.Sprintf(`
+		//		%v with the score of %d`, user.Mention(), score), 3).Build())
 
 		// statistics for "bad" users
-		id, score = findMax(antiStatistics, antiStatsIds)
-		user, err = s.User(id)
+		id, score := findMax(antiStatistics, antiIds)
+		user, err := s.User(id)
 		if err != nil {
 			Logger().Printf("Error retrieving user from session: %v", err)
 			return
@@ -102,25 +112,25 @@ func ProfanityAnalysis(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		s.ChannelMessageSendEmbed(m.ChannelID, tmp.CreateEmbedMessage("The most motherfucking user on this motherfucking server...",
 			fmt.Sprintf(`
-				%v with the score of %d
+				%v with the profanity score of %d
 			`, user.Mention(), score), 3).Build())
 
 	}
 }
 
-func elementInArray(arr []string, elem string) bool {
-	for i := 0; i <= len(arr)-1; i++ {
-		if arr[i] == elem {
-			return true
-		}
-	}
-	return false
-}
+//func elementInArray(arr []string, elem string) bool {
+//	for i := 0; i < len(arr); i++ {
+//		if arr[i] == elem {
+//			return true
+//		}
+//	}
+//	return false
+//}
 
 func findMax(stats map[string]int, ids []string) (string, int) {
 	max := stats[ids[0]]
 	id := ids[0]
-	for i := 0; i <= len(ids)-1; i++ {
+	for i := 0; i < len(ids); i++ {
 		if stats[ids[i]] > max {
 			max = stats[ids[i]]
 			id = ids[i]
@@ -130,13 +140,11 @@ func findMax(stats map[string]int, ids []string) (string, int) {
 }
 
 // profanityCheck returns bool, if m.Content contains profanity
-func profanityCheck(s string, file []byte) bool {
-	fi := string(file)
-	arr := strings.Split(string(fi), " ")
-	for i := 0; i < len(arr)-1; i++ {
-		if strings.Contains(s, arr[i]) {
-			return false
+func profanityCheck(s string, profanityArray []string) bool {
+	for i := 0; i <= len(profanityArray)-1; i++ {
+		if strings.Contains(s, profanityArray[i]) {
+			return true
 		}
 	}
-	return true
+	return false
 }

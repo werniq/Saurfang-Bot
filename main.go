@@ -35,6 +35,8 @@ func main() {
 	bot.AddHandler(commands.Help)
 	bot.AddHandler(commands.ChangeStatus)
 	bot.AddHandler(commands.SearchGifs)
+	bot.AddHandler(commands.FindLyrics)
+	bot.AddHandler(commands.ProfanityAnalysis)
 	bot.AddHandler(commands.GreetNewMember)
 	bot.AddHandler(commands.ListRules)
 	bot.AddHandler(commands.Ban)

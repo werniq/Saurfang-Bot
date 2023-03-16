@@ -24,13 +24,15 @@ const (
 	Hey!
 		My name is Saurfang, and I am extremely useful bot!
 		I have such commands: 
-			.search {keyword} 	  		- Send gif, which represents keyword
-			.help 			      		- List of commands, which this bot wields
-			.ban	{user} {reason} 	- Kick out user from server 
-			.listrules 		  	    	- Prints all rules, in this server
-			.unban 						- Unbans user(need to reply to message)
-			.weather latitude longitude - Print weather forecast by give coordinates
-			.token  {token} 			- Returns price of {token} on ByBit crypto exchange
+			.search 	{keyword} 	  					- Send gif, which represents keyword
+			.help 			      						- List of commands, which this bot wields
+			.ban		{user} {reason} 				- Kick out user from server 
+			.listrules 		  	    					- Prints all rules, in this server
+			.unban 										- Unbans user(need to reply to message)
+			.weather 	latitude longitude		 		- Print weather forecast by give coordinates
+			.token  	{token} 						- Returns price of {token} on ByBit crypto exchange
+			.lyrics 	{lyrics of song you wanna find} - Find song by it's lyrics
+			.p
 	`
 	rules = `
 		Harass, bully, or threat marginalized or vulnerable groups of people,
