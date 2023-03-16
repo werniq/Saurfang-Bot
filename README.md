@@ -1,30 +1,45 @@
+# Discord Bot
 
-# Discord bot 
-<hr>
-<h3>Discord bot's become quite popular project, to practice golang. So I decided to make my own bot too <3 </h3>
-    <h3>This bot has next functionalities: </h3>
+This is a Discord bot written in Go that provides various functionalities to users.
 
-<h1> func searchGifs</h1>
-     ### This function you can call by typing .search {keyword}
-     ### It sends you back a gif, which represents given keywoard
- 
-<h1> func help</h1>
- ###   Help function sends you message, with all functions that this bot can run.
-    
-<h1> greetNewMember </h1>
-### It prints greeting, suitable to my server. 
+## Available Commands
 
-<h1> listRules </h1> 
-###    Lists all rules which works on this particular server </li>
-    
-<h1> func ban </h1> 
-###     ban {user} {reason}  </li>
-###     Bans User for 1 day  
-        
-<h1> func unban </h1> 
-        
-### (you need to reply for prioritively unbanned user message)  </li>
-### Unbans user  
+- `.search {keyword}`: Sends a gif that represents the provided keyword to add some fun and expression to the conversation.
+
+  Example: `.search dog`
+
+- `.help`: Provides a list of all the commands that this bot can perform for the user.
+
+  Example: `.help`
+
+- `.ban {user} {reason}`: Allows you to remove a user from the server.
+
+  Example: `.ban @JohnDoe Breaking the rules`
+
+- `.listrules`: Prints all the rules in this server.
+
+  Example: `.listrules`
+
+- `.unban`: Unbans a user. You need to reply to the message where the user was banned.
+
+  Example: `.unban`
+
+- `.weather {latitude} {longitude}`: Prints the weather forecast for the given coordinates.
+
+  Example: `.weather 37.7749 -122.4194`
+
+- `.token {token}`: Returns the current price of the given token on the ByBit crypto exchange.
+
+  Example: `.token BTC`
+
+- `.lyrics {lyrics of song you wanna find}`: Finds a song by its lyrics.
+
+  Example: `.lyrics "I'm a survivor, I'm not gonna give up"`
+
+- `.profanity`: Returns the user who uses the most bad words.
+
+  Example: `.profanity`
+
 <img src="https://miro.medium.com/max/640/1*WMQ9AhJ_T_LEHuxiPoVaBw.webp">
 <img src="https://user-images.githubusercontent.com/73220736/215282620-f9699190-cbfa-4f46-89bd-238d3ebc0cd9.jpg">
 <img src="https://user-images.githubusercontent.com/73220736/215282626-5e7bedb1-afbc-4c6d-bf5d-b3963b6c570b.jpg">
