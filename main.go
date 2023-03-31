@@ -46,6 +46,7 @@ func main() {
 	//bot.AddHandler(commands.Stats)
 	bot.AddHandler(commands.WordStats)
 	bot.AddHandler(commands.Spam)
+	bot.AddHandler(commands.CreateDiagram)
 
 	bot.Identify.Intents = discordgo.IntentsGuildMessages
 	bot.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildMembers | discordgo.IntentsGuildPresences
